@@ -1,0 +1,8 @@
+logging.level:
+  com.example: debug
+  org.apache.http: warn
+  ca.uhn.fhir.rest.client.interceptor.LoggingInterceptor: warn
+
+hapi.fhir:
+  version: r4
+  server.url:  http://hapi.fhir.org/baseR4

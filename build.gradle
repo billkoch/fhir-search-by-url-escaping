@@ -1,0 +1,51 @@
+plugins {
+  id 'org.springframework.boot' version '2.2.4.RELEASE'
+  id 'io.spring.dependency-management' version '1.0.9.RELEASE'
+  id 'java'
+  id 'com.diffplug.gradle.spotless' version '3.27.0'
+}
+
+group = 'com.example'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '11'
+
+repositories {
+  mavenCentral()
+}
+
+ext['camel.version'] = '3.0.1'
+ext['hapi.fhir.version'] = '4.1.0'
+
+dependencies {
+  implementation 'org.springframework.boot:spring-boot-starter'
+  implementation "ca.uhn.hapi.fhir:hapi-fhir-spring-boot-starter:${project.ext['hapi.fhir.version']}"
+  implementation "ca.uhn.hapi.fhir:hapi-fhir-client:${project.ext['hapi.fhir.version']}"
+  implementation "ca.uhn.hapi.fhir:hapi-fhir-structures-r4:${project.ext['hapi.fhir.version']}"
+
+  compileOnly 'org.projectlombok:lombok'
+  annotationProcessor 'org.projectlombok:lombok'
+
+  testImplementation('org.springframework.boot:spring-boot-starter-test') {
+    exclude group: 'org.junit.vintage', module: 'junit-vintage-engine'
+  }
+}
+
+test {
+  useJUnitPlatform()
+}
+
+spotless {
+  java {
+    googleJavaFormat()
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+    paddedCell()
+  }
+  format 'gradle', {
+    target '**/*.gradle'
+    trimTrailingWhitespace()
+    indentWithSpaces(2)
+    endWithNewline()
+  }
+}
