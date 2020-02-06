@@ -1,6 +1,7 @@
 package com.example;
 
 import ca.uhn.fhir.rest.client.api.IGenericClient;
+import com.google.common.escape.Escaper;
 import java.util.UUID;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -20,6 +21,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class Application implements CommandLineRunner {
 
   private final IGenericClient fhirClient;
+
+  private final Escaper hackyEscaper;
 
   @Override
   public void run(String... args) {
@@ -49,7 +52,7 @@ public class Application implements CommandLineRunner {
             .search()
             // The issue arises here, because the leading space character of the MRN isn't URL
             // encoded to "%20"
-            .byUrl("/Patient?identifier=http://acme.org/mrns|" + mrn)
+            .byUrl("/Patient?identifier=http://acme.org/mrns|" + hackyEscaper.escape(mrn))
             .returnBundle(Bundle.class)
             .execute();
 
